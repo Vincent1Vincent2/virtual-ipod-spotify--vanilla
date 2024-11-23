@@ -1,4 +1,10 @@
-class SpotifyAuth {
+import {
+  base64encode,
+  generateRandomString,
+  sha256,
+} from "../utils/functions.js";
+
+export class SpotifyAuth {
   constructor() {
     this.clientId = "3b5fd71beb4c445f9a51f13f11ada78c";
     this.redirectUri = "http://127.0.0.1:5500/";
@@ -6,34 +12,13 @@ class SpotifyAuth {
     this.authUrl = new URL("https://accounts.spotify.com/authorize");
     this.tokenUrl = "https://accounts.spotify.com/api/token";
 
-    // Check for authentication callback on page load
     this.handleCallback();
   }
 
-  generateRandomString(length) {
-    const possible =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const values = crypto.getRandomValues(new Uint8Array(length));
-    return values.reduce((acc, x) => acc + possible[x % possible.length], "");
-  }
-
-  async sha256(plain) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(plain);
-    return window.crypto.subtle.digest("SHA-256", data);
-  }
-
-  base64encode(input) {
-    return btoa(String.fromCharCode(...new Uint8Array(input)))
-      .replace(/=/g, "")
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_");
-  }
-
   async generateCodeChallenge() {
-    const codeVerifier = this.generateRandomString(64);
-    const hashed = await this.sha256(codeVerifier);
-    const codeChallenge = this.base64encode(hashed);
+    const codeVerifier = generateRandomString(64);
+    const hashed = await sha256(codeVerifier);
+    const codeChallenge = base64encode(hashed);
     return { codeVerifier, codeChallenge };
   }
 
@@ -41,8 +26,6 @@ class SpotifyAuth {
     try {
       const { codeVerifier, codeChallenge } =
         await this.generateCodeChallenge();
-
-      // Store code verifier for later use
       window.localStorage.setItem("code_verifier", codeVerifier);
 
       const params = {
@@ -68,8 +51,8 @@ class SpotifyAuth {
     if (code) {
       try {
         await this.getToken(code);
-        // Clear the URL parameters after successful token exchange
         window.history.replaceState({}, document.title, "/");
+        window.location.href = "/src/pages/home/home.html";
       } catch (error) {
         console.error("Token exchange failed:", error);
       }
@@ -162,25 +145,19 @@ class SpotifyAuth {
   }
 
   onAuthComplete(tokenData) {
-    // Handle successful authentication
     console.log("Authentication completed successfully!");
-    // Hide login button, show user profile, etc.
     const loginButton = document.getElementById("button");
     if (loginButton) {
       loginButton.style.display = "none";
     }
   }
 
-  // Utility method to check if the current token is valid
   isTokenValid() {
     const expiration = localStorage.getItem("token_expiration");
     if (!expiration) return false;
-
-    // Return true if token is still valid (with 1 minute buffer)
     return new Date().getTime() < parseInt(expiration) - 60000;
   }
 
-  // Get the current access token (refreshing if necessary)
   async getValidToken() {
     if (!this.isTokenValid()) {
       try {
@@ -191,46 +168,5 @@ class SpotifyAuth {
       }
     }
     return localStorage.getItem("access_token");
-  }
-}
-
-// Initialize auth when DOM is loaded
-document.addEventListener("DOMContentLoaded", () => {
-  const spotifyAuth = new SpotifyAuth();
-  const signInButton = document.getElementById("button");
-  const userButton = document.getElementById("user_button");
-
-  if (signInButton) {
-    signInButton.addEventListener("click", () => {
-      spotifyAuth.authorizeUser();
-    });
-  } else {
-    console.error("Sign in button not found!");
-  }
-  userButton.addEventListener("click", () => {
-    makeSpotifyApiCall();
-  });
-});
-
-// Make API calls
-async function makeSpotifyApiCall() {
-  const auth = new SpotifyAuth();
-  const token = await auth.getValidToken();
-
-  if (!token) {
-    console.error("No valid token available");
-    return;
-  }
-
-  try {
-    const response = await fetch("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await response.json();
-    console.log("User profile:", data);
-  } catch (error) {
-    console.error("API call failed:", error);
   }
 }
