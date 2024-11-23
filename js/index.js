@@ -1,6 +1,6 @@
 class SpotifyAuth {
   constructor() {
-    this.clientId = "";
+    this.clientId = "3b5fd71beb4c445f9a51f13f11ada78c";
     this.redirectUri = "http://127.0.0.1:5500/";
     this.scope = "user-read-private user-read-email";
     this.authUrl = new URL("https://accounts.spotify.com/authorize");
@@ -162,9 +162,9 @@ class SpotifyAuth {
   }
 
   onAuthComplete(tokenData) {
-    // You can customize this method to handle successful authentication
+    // Handle successful authentication
     console.log("Authentication completed successfully!");
-    // Example: Hide login button, show user profile, etc.
+    // Hide login button, show user profile, etc.
     const loginButton = document.getElementById("button");
     if (loginButton) {
       loginButton.style.display = "none";
@@ -198,6 +198,7 @@ class SpotifyAuth {
 document.addEventListener("DOMContentLoaded", () => {
   const spotifyAuth = new SpotifyAuth();
   const signInButton = document.getElementById("button");
+  const userButton = document.getElementById("user_button");
 
   if (signInButton) {
     signInButton.addEventListener("click", () => {
@@ -206,9 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Sign in button not found!");
   }
+  userButton.addEventListener("click", () => {
+    makeSpotifyApiCall();
+  });
 });
 
-// Example of how to use the token to make API calls
+// Make API calls
 async function makeSpotifyApiCall() {
   const auth = new SpotifyAuth();
   const token = await auth.getValidToken();
