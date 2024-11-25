@@ -1,0 +1,17 @@
+.ipod-content-wrapper,
+.screen-container,
+.click-wheel-container {
+  position: absolute;
+}
+
+.ipod-overlay {
+  height: inherit;
+  width: inherit;
+}
+
+.touch-ring,
+.click-wheel-controls {
+  position: relative;
+  height: inherit;
+  width: inherit;
+}

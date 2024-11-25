@@ -8,10 +8,9 @@ export class SpotifyAuth {
   constructor() {
     this.clientId = "3b5fd71beb4c445f9a51f13f11ada78c";
     this.redirectUri = "http://127.0.0.1:5500/";
-    this.scope = "user-read-private user-read-email";
+    this.scope = "user-read-private user-read-email user-library-read";
     this.authUrl = new URL("https://accounts.spotify.com/authorize");
     this.tokenUrl = "https://accounts.spotify.com/api/token";
-
     this.handleCallback();
   }
 
@@ -52,7 +51,7 @@ export class SpotifyAuth {
       try {
         await this.getToken(code);
         window.history.replaceState({}, document.title, "/");
-        window.location.href = "/src/pages/home/home.html";
+        window.location.href = "/pages/home.html";
       } catch (error) {
         console.error("Token exchange failed:", error);
       }
