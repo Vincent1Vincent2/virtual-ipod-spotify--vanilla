@@ -1,4 +1,6 @@
-import { makeSpotifyApiCall } from "./src/api/user.js";
+import { getUserPlaylists } from "./src/api/playlists.js";
+import { getSavedTracks } from "./src/api/tacks.js";
+import { getUserData } from "./src/api/user.js";
 import { SpotifyAuth } from "./src/auth/auth.js";
 import { loadSVG } from "./src/utils/SVG-loader.js";
 
@@ -6,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const spotifyAuth = new SpotifyAuth();
   const signInButton = document.getElementById("button");
   const userButton = document.getElementById("user_button");
+
+  const userPlaylistButton = document.getElementById("user_playlist_button");
+  const savedTracksButton = document.getElementById("saved_tracks");
 
   if (signInButton) {
     signInButton.addEventListener("click", () => {
@@ -24,7 +29,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (userButton) {
     userButton.addEventListener("click", () => {
-      makeSpotifyApiCall();
+      getUserData();
+    });
+  }
+  if (savedTracksButton) {
+    savedTracksButton.addEventListener("click", () => {
+      getSavedTracks();
+    });
+  }
+  if (userPlaylistButton) {
+    userPlaylistButton.addEventListener("click", () => {
+      getUserPlaylists();
     });
   }
 });

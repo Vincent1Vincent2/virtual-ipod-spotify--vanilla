@@ -1,4 +1,4 @@
-export async function makeSpotifyApiCall() {
+export async function getUserData() {
   try {
     const token = await localStorage.getItem("access_token");
     if (!token) {
