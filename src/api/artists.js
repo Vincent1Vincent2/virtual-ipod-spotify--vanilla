@@ -1,7 +1,7 @@
 import { SpotifyAuth } from "../auth/auth.js";
 import { MediaList } from "../components/MediaList.js";
 
-export async function getUserPlaylists() {
+export async function getUserArtists() {
   try {
     const spotifyAuth = new SpotifyAuth();
     const token = await spotifyAuth.getValidToken();
@@ -11,7 +11,7 @@ export async function getUserPlaylists() {
     }
 
     const response = await fetch(
-      "https://api.spotify.com/v1/me/playlists?" +
+      "https://api.spotify.com/v1/me/artists?" +
         new URLSearchParams({
           limit: "10",
           offset: "0",

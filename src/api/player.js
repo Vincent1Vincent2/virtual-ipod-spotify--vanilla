@@ -1,6 +1,6 @@
 import { SpotifyAuth } from "../auth/auth.js";
 
-export async function getSavedTracks() {
+export async function getDevices() {
   try {
     const spotifyAuth = new SpotifyAuth();
     const token = await spotifyAuth.getValidToken();
@@ -9,25 +9,15 @@ export async function getSavedTracks() {
       throw new Error("No valid token available");
     }
 
-    const response = await fetch(
-      "https://api.spotify.com/v1/me/tracks?" +
-        new URLSearchParams({
-          limit: "10",
-          offset: "0",
-        }),
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch("https://api.spotify.com/v1/me/player", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const data = await response.json();
-    const mediaList = MediaList(data.items);
-
-    // Append to document
-    document.getElementById("content").appendChild(mediaList);
+    console.log(data);
   } catch (error) {
     console.error("Failed to fetch saved tracks:", error);
     throw error;

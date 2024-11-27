@@ -8,7 +8,9 @@ export class SpotifyAuth {
   constructor() {
     this.clientId = "3b5fd71beb4c445f9a51f13f11ada78c";
     this.redirectUri = "http://127.0.0.1:5500/";
-    this.scope = "user-read-private user-read-email user-library-read";
+    this.scope =
+      "user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private";
+
     this.authUrl = new URL("https://accounts.spotify.com/authorize");
     this.tokenUrl = "https://accounts.spotify.com/api/token";
     this.handleCallback();

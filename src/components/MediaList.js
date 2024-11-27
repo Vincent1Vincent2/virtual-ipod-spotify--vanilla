@@ -11,7 +11,7 @@
 //    - type: string
 //    - uri: string
 
-export function Media_list(items) {
+export function MediaList(items) {
   const container = document.createElement("div");
 
   items.forEach((item) => {
