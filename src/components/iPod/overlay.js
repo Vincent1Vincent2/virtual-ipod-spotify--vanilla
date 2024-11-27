@@ -1,5 +1,5 @@
 import { Menu } from "../Menu.js";
-import { ClickWheel } from "./click-wheel.js";
+import { ClickWheel } from "./ClickWheel.js";
 
 export function createIPodOverlay(dimensions) {
   const container = document.createElement("div");

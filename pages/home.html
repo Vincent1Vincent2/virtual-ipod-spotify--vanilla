@@ -6,11 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
   <link rel="stylesheet" href="/src/assets/css/iPodLayout.css">
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
 </head>
 
 <body>
+  <button id="devices_button">Get Devices</button>
   <button id="user_playlist_button">Get User Playlists</button>
-
   <button id="saved_tracks">Get Saved Tracks</button>
   <button id="user_button">Check user</button>
   <button id="button">Sign In</button>
@@ -19,7 +20,9 @@
   <main class="ipod-content-wrapper ipod-shell">
     <svg ref={svgRef} class="ipod-svg" viewBox="0 0 340 550" xmlns="http://www.w3.org/2000/svg"></svg>
   </main>
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script type="module" src="../../../index.js"></script>
+  <script type="module" src="../src/init.js"></script>
 </body>
 
 </html>
